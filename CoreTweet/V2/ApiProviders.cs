@@ -60,5 +60,30 @@ namespace CoreTweet.V2
         /// Gets the wrapper of Hide replies API on Twitter API v2.
         /// </summary>
         public HideRepliesApi HideRepliesApi => new HideRepliesApi(this.Tokens);
+
+        /// <summary>
+        /// Gets the wrapper of Like API on Twitter API v2.
+        /// </summary>
+        public LikeApi LikeApi => new LikeApi(this.Tokens);
+
+        /// <summary>
+        /// Gets the wrapper of Manage Tweet API on Twitter API v2.
+        /// </summary>
+        public ManageTweetApi ManageTweetApi => new ManageTweetApi(this.Tokens);
+
+        /// <summary>
+        /// Gets the wrapper of Retweet API on Twitter API v2.
+        /// </summary>
+        public RetweetApi RetweetApi => new RetweetApi(this.Tokens);
+
+        /// <summary>
+        /// Gets the wrapper of Timeline API on Twitter API v2.
+        /// </summary>
+        public TimelineApi TimelineApi => new TimelineApi(this.Tokens);
+
+        /// <summary>
+        /// Gets the wrapper of Follow API on Twitter API v2.
+        /// </summary>
+        public FollowApi FollowApi => new FollowApi(this.Tokens);
     }
 }

@@ -1,0 +1,63 @@
+#root V2
+#namespace RetweetApi
+#urlsuffix ""
+#description Provides a set of methods for the wrapper of Retweet API on Twitter API v2.
+
+endpoint RetweetedUsersResponse GetRetweetedBy : Get tweets/{id}/retweeted_by
+{
+    description
+    {
+        Returns a variety of information about who has Retweeted a Tweet.
+    }
+    returns
+    {
+        The Users.
+    }
+    params
+    {
+        required long id
+        optional UserExpansions expansions
+        optional int max_results
+        optional string pagination_token
+        optional TweetFields tweet_fields="tweet.fields"
+        optional UserFields user_fields="user.fields"
+    }
+}
+
+endpoint ManageResponse<RetweetResult> Retweet : Post users/{id}/retweets
+{
+    description
+    {
+        Retweet the target Tweet.
+    }
+    returns
+    {
+        The managing result (true: successful to retweet).
+    }
+    params
+    {
+        required long id
+        required long tweet_id
+    }
+    jsonmap
+    {
+        "tweet_id": $tweet_id
+    }
+}
+
+endpoint ManageResponse<RetweetResult> Unretweet : Delete users/{id}/retweets/{source_tweet_id}
+{
+    description
+    {
+        Remove the Retweet of a Tweet.
+    }
+    returns
+    {
+        The managing result (false: successful to unretweet).
+    }
+    params
+    {
+        required long id
+        required long source_tweet_id
+    }
+}

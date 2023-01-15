@@ -84,6 +84,18 @@ namespace CoreTweet.Core
         {
             if (value == null) return "null";
 
+            var longValue = value as long?;
+            if (longValue.HasValue)
+            {
+                return FormatValueForJson(longValue.Value.ToString("D", CultureInfo.InvariantCulture));
+            }
+
+            var longEnumerable = value as IEnumerable<long>;
+            if (longEnumerable != null)
+            {
+                return FormatValueForJson(longEnumerable.Select(x => x.ToString("D", CultureInfo.InvariantCulture)));
+            }
+
             var type = value.GetType();
             if (type.Name == "FSharpOption`1")
             {

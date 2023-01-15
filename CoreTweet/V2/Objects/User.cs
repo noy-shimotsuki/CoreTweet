@@ -22,9 +22,11 @@
 // THE SOFTWARE.
 
 using System;
+using System.Runtime.Serialization;
 using System.Text;
 using CoreTweet.Core;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace CoreTweet.V2
 {
@@ -111,6 +113,15 @@ namespace CoreTweet.V2
         /// </remarks>
         [JsonProperty("verified")]
         public bool? Verified { get; set; }
+
+        /// <summary>
+        /// Indicates the type of verification for the Twitter account.
+        /// </summary>
+        /// <remarks>
+        /// To return this field, add <see cref="UserFields.VerifiedType"/> in the request's query parameter.
+        /// </remarks>
+        [JsonProperty("verified_type")]
+        public VerifiedType VerifiedType { get; set; }
 
         /// <summary>
         /// This object and its children fields contain details about text that has a special meaning in the user's description.
@@ -239,7 +250,8 @@ namespace CoreTweet.V2
         Username        = 0x00000800,
         Verified        = 0x00001000,
         Withheld        = 0x00002000,
-        All             = 0x00003fff,
+        VerifiedType    = 0x00004000,
+        All             = 0x00007fff,
     }
 
     internal static class UserFieldsExtensions
@@ -279,6 +291,8 @@ namespace CoreTweet.V2
                 builder.Append("verified,");
             if ((value & UserFields.Withheld) != 0)
                 builder.Append("withheld,");
+            if ((value & UserFields.VerifiedType) != 0)
+                builder.Append("verified_type,");
 
             return builder.ToString(0, builder.Length - 1);
         }
@@ -309,5 +323,18 @@ namespace CoreTweet.V2
 
             return builder.ToString(0, builder.Length - 1);
         }
+    }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum VerifiedType
+    {
+        [EnumMember(Value = "none")]
+        None,
+        [EnumMember(Value = "blue")]
+        Blue,
+        [EnumMember(Value = "business")]
+        Business,
+        [EnumMember(Value = "government")]
+        Government,
     }
 }

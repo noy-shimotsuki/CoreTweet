@@ -1,0 +1,80 @@
+#root V2
+#namespace FollowApi
+#urlsuffix ""
+#description Provides a set of methods for the wrapper of User Lookup API on Twitter API v2.
+
+endpoint FollowUsersResponse GetFollowings : Get users/{id}/following
+{
+    description
+    {
+        Returns a variety of information about a list of users the specified user ID is following.
+    }
+    returns
+    {
+        The Users.
+    }
+    params
+    {
+        required long id
+        optional int max_results
+        optional string pagination_token
+        optional UserExpansions expansions
+        optional TweetFields tweet_fields="tweet.fields"
+        optional UserFields user_fields="user.fields"
+    }
+}
+
+endpoint FollowUsersResponse GetFollowers : Get users/{id}/followers
+{
+    description
+    {
+        Returns a variety of information about a list of users who are followers of the specified user ID.
+    }
+    returns
+    {
+        The Users.
+    }
+    params
+    {
+        required long id
+        optional int max_results
+        optional string pagination_token
+        optional UserExpansions expansions
+        optional TweetFields tweet_fields="tweet.fields"
+        optional UserFields user_fields="user.fields"
+    }
+}
+
+endpoint ManageResponse<FollowResult> Follow : Post users/{id}/following
+{
+    description
+    {
+         Follow another user.
+    }
+    returns
+    {
+        The managing result.
+    }
+    params
+    {
+        required long id
+        required long target_user_id
+    }
+}
+
+endpoint ManageResponse<UnfollowResult> Unfollow : Delete users/{source_user_id}/following/{target_user_id}
+{
+    description
+    {
+         Unfollow another user.
+    }
+    returns
+    {
+        The managing result (false: successful to unfollow).
+    }
+    params
+    {
+        required long source_user_id
+        required long target_user_id
+    }
+}

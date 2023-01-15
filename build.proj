@@ -20,7 +20,8 @@
     <TestTarget Include="net45"/>
     <TestTarget Include="net461"/>
     <TestTarget Include="netcoreapp3.1"/>
-    <TestTarget Include="net5"/>
+    <TestTarget Include="net6.0"/>
+    <TestTarget Include="net7.0"/>
   </ItemGroup>
 
   <Target Name="VSTest">

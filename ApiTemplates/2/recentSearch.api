@@ -3,7 +3,7 @@
 #urlsuffix ""
 #description Provides a set of methods for the wrapper of Recent search v2 API on Twitter API v2.
 
-endpoint RecentSearchResponse GetTweets : Get tweets/search
+endpoint RecentSearchResponse GetTweets : Get tweets/search/recent
 {
     description
     {

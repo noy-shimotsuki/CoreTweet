@@ -1,0 +1,83 @@
+#root V2
+#namespace LikeApi
+#urlsuffix ""
+#description Provides a set of methods for the wrapper of Like API on Twitter API v2.
+
+endpoint LikedUsersResponse GetLikingUsers : Get tweets/{id}/liking_users
+{
+    description
+    {
+        Returns a variety of information about a Tweet's liking users.
+    }
+    returns
+    {
+        The Users.
+    }
+    params
+    {
+        required long id
+        optional UserExpansions expansions
+        optional int max_results
+        optional string pagination_token
+        optional TweetFields tweet_fields="tweet.fields"
+        optional UserFields user_fields="user.fields"
+    }
+}
+
+endpoint LikedTweetsResponse GetLikedTweets : Get users/{id}/liked_tweets
+{
+    description
+    {
+        Returns a variety of information about a user's liked Tweets.
+    }
+    returns
+    {
+        The Tweets.
+    }
+    params
+    {
+        required long id
+        optional int max_results
+        optional string pagination_token
+        optional TweetExpansions expansions
+        optional MediaFields media_fields="media.fields"
+        optional PlaceFields place_fields="place.fields"
+        optional PollFields poll_fields="poll.fields"
+        optional TweetFields tweet_fields="tweet.fields"
+        optional UserFields user_fields="user.fields"
+    }
+}
+
+endpoint ManageResponse<LikeResult> Like : Post users/{id}/likes
+{
+    description
+    {
+        Like the target Tweet.
+    }
+    returns
+    {
+        The managing result (true: successful to like).
+    }
+    params
+    {
+        required long id
+        required long tweet_id
+    }
+}
+
+endpoint ManageResponse<LikeResult> Unlike : Delete users/{id}/likes/{tweet_id}
+{
+    description
+    {
+        Unlike a Tweet.
+    }
+    returns
+    {
+        The managing result (false: successful to unlike).
+    }
+    params
+    {
+        required long id
+        required long tweet_id
+    }
+}

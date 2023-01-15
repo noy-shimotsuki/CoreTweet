@@ -162,7 +162,18 @@ namespace CoreTweet.V2
         /// To return this field, add <see cref="TweetFields.Source"/> in the request's query parameter.
         /// </summary>
         [JsonProperty("source")]
+        [Obsolete("Removed the source field from the Tweet payload at December 20, 2022")]
         public string Source { get; set; }
+
+        /// <summary>
+        /// Unique identifiers indicating all versions of an edited Tweet. For Tweets with no edits, there will be one ID.
+        /// For Tweets with an edit history, there will be multiple IDs, arranged in ascending order reflecting the order of edit, with the most recent version in the last position of the array.
+        /// </summary>
+        [JsonProperty("edit_history_tweet_ids")]
+        public long[] EditHistoryTweetIds { get; set; }
+
+        [JsonProperty("edit_controls")]
+        public TweetEditControls EditControls { get; set; }
     }
 
     public class TweetReferencedTweet : CoreBase
@@ -366,6 +377,12 @@ namespace CoreTweet.V2
         /// </summary>
         [JsonProperty("reply_count")]
         public int ReplyCount { get; set; }
+
+        /// <summary>
+        /// Number of times this Tweet has been viewed.
+        /// </summary>
+        [JsonProperty("impression_count")]
+        public int ImpressionCount { get; set; }
     }
 
     public class TweetNonPublicMetrics : CoreBase, ITweetNonPublicMetrics
@@ -438,6 +455,30 @@ namespace CoreTweet.V2
         public int UserProfileClicks { get; set; }
     }
 
+    public class TweetEditControls : CoreBase
+    {
+        /// <summary>
+        /// Indicates if a Tweet was eligible for edit when published.
+        /// </summary>
+        /// <remarks>
+        /// This field is not dynamic and won't toggle from True to False when a Tweet reaches its editable time limit, or maximum number of edits.
+        /// </remarks>
+        [JsonProperty("is_edit_eligible")]
+        public bool IsEditEligible{ get; set; }
+
+        /// <summary>
+        /// Editable Tweets can be edited for the first 30 minutes after creation. 
+        /// </summary>
+        [JsonProperty("editable_until")]
+        public DateTimeOffset? EditableUntil { get; set; }
+
+        /// <summary>
+        /// Editable Tweets can be edited up to five times. 
+        /// </summary>
+        [JsonProperty("edits_remaining")]
+        public int EditsRemaining { get; set; }
+    }
+
     public class TweetResponseIncludes : CoreBase
     {
         /// <summary>
@@ -492,6 +533,18 @@ namespace CoreTweet.V2
         public TweetResponseIncludes Includes { get; set; }
     }
 
+    public class ManageResponse<T> : ResponseBase where T : class
+    {
+        [JsonProperty("data")]
+        public T Data { get; set; }
+    }
+
+    public class DeleteResult : CoreBase
+    {
+        [JsonProperty("deleted")]
+        public bool Deleted { get; set; }
+    }
+
     /// <summary>
     /// List of fields to return in the Tweet object. By default, the endpoint only returns <see cref="TweetFields.Id"/> and <see cref="TweetFields.Text"/>.
     /// </summary>
@@ -518,7 +571,8 @@ namespace CoreTweet.V2
         Source             = 0x00010000,
         Text               = 0x00020000,
         Withheld           = 0x00040000,
-        All                = 0x0007ffff,
+        EditControls       = 0x00080000,
+        All                = 0x000fffff,
     }
 
     public static class TweetFieldsExtensions
@@ -568,6 +622,8 @@ namespace CoreTweet.V2
                 builder.Append("text,");
             if ((value & TweetFields.Withheld) != 0)
                 builder.Append("withheld,");
+            if ((value & TweetFields.EditControls) != 0)
+                builder.Append("edit_controls,");
 
             return builder.ToString(0, builder.Length - 1);
         }
@@ -588,7 +644,8 @@ namespace CoreTweet.V2
         InReplyToUserId            = 0x00000020,
         ReferencedTweetsId         = 0x00000040,
         ReferencedTweetsIdAuthorId = 0x00000080,
-        All                        = 0x000000ff,
+        EditHistoryTweetIds        = 0x00000100,
+        All                        = 0x000001ff,
     }
 
     public static class TweetExpansionsExtensions
@@ -616,8 +673,22 @@ namespace CoreTweet.V2
                 builder.Append("referenced_tweets.id,");
             if ((value & TweetExpansions.ReferencedTweetsIdAuthorId) != 0)
                 builder.Append("referenced_tweets.id.author_id,");
+            if ((value & TweetExpansions.EditHistoryTweetIds) != 0)
+                builder.Append("edit_history_tweet_ids,");
 
             return builder.ToString(0, builder.Length - 1);
         }
+    }
+
+    /// <summary>
+    /// Settings to indicate who can reply to the Tweet.
+    /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum ReplySettings
+    {
+        [EnumMember(Value = "following")]
+        Following,
+        [EnumMember(Value = "mentionedUsers")]
+        MentionedUsers,
     }
 }

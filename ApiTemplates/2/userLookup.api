@@ -53,7 +53,7 @@ endpoint UsersResponse GetUsers : Get users
     }
     params
     {
-        required IEnumerable<long> id
+        required IEnumerable<long> ids
         optional UserExpansions expansions
         optional TweetFields tweet_fields="tweet.fields"
         optional UserFields user_fields="user.fields"

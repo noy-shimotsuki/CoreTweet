@@ -1,0 +1,90 @@
+#root V2
+#namespace TimelineApi
+#urlsuffix ""
+#description Provides a set of methods for the wrapper of Timeline API on Twitter API v2.
+
+endpoint TimelineResponse GetReverseChronologicalTimeline : Get users/{id}/timelines/reverse_chronological
+{
+    description
+    {
+        Returns a variety of information about a collection of the most recent Tweets and Retweets posted by you and users you follow.
+    }
+    returns
+    {
+        The Tweets.
+    }
+    params
+    {
+        required long id
+        optional TimelineExcludes exclude
+        optional DateTimeOffset start_time
+        optional DateTimeOffset end_time
+        optional int max_results
+        optional string pagination_token
+        optional long since_id
+        optional long until_id
+        optional TweetExpansions expansions
+        optional MediaFields media_fields="media.fields"
+        optional PlaceFields place_fields="place.fields"
+        optional PollFields poll_fields="poll.fields"
+        optional TweetFields tweet_fields="tweet.fields"
+        optional UserFields user_fields="user.fields"
+    }
+}
+
+endpoint TimelineResponse GetMentionsTimeline : Get users/{id}/mentions
+{
+    description
+    {
+        Returns a variety of information about a Tweets mentioning a single user.
+    }
+    returns
+    {
+        The Tweets.
+    }
+    params
+    {
+        required long id
+        optional DateTimeOffset start_time
+        optional DateTimeOffset end_time
+        optional int max_results
+        optional string pagination_token
+        optional long since_id
+        optional long until_id
+        optional TweetExpansions expansions
+        optional MediaFields media_fields="media.fields"
+        optional PlaceFields place_fields="place.fields"
+        optional PollFields poll_fields="poll.fields"
+        optional TweetFields tweet_fields="tweet.fields"
+        optional UserFields user_fields="user.fields"
+    }
+}
+
+endpoint TimelineResponse GetUserTimeline : Get users/{id}/tweets
+{
+    description
+    {
+        Returns a variety of information about a Tweets composed by a single user.
+    }
+    returns
+    {
+        The Tweets.
+    }
+    params
+    {
+        required long id
+        optional TimelineExcludes exclude
+        optional DateTimeOffset start_time
+        optional DateTimeOffset end_time
+        optional int max_results
+        optional string pagination_token
+        optional long since_id
+        optional long until_id
+        optional TweetExpansions expansions
+        optional MediaFields media_fields="media.fields"
+        optional PlaceFields place_fields="place.fields"
+        optional PollFields poll_fields="poll.fields"
+        optional TweetFields tweet_fields="tweet.fields"
+        optional UserFields user_fields="user.fields"
+    }
+}

@@ -1,0 +1,70 @@
+#root V2
+#namespace ManageTweetApi
+#urlsuffix ""
+#description Provides a set of methods for the wrapper of Manage Tweet API on Twitter API v2.
+
+endpoint TweetResponse Tweet : Post tweets
+{
+    description
+    {
+        Post a single Tweet.
+    }
+    jsonmap
+    {
+        "text": $text,
+        "direct_message_deep_link": $direct_message_deep_link,
+        "for_super_followers_only": $for_super_followers_only,
+        "geo": {
+            "place_id": $geo_place_id
+        },
+        "media": {
+            "media_ids": $media_ids,
+            "tagged_user_ids": $media_tagged_user_ids
+        },
+        "poll": {
+            "duration_minutes": $poll_duration_minutes,
+            "options": $poll_options
+        },
+        "quote_tweet_id": $quote_tweet_id,
+        "reply": {
+            "exclude_reply_user_ids": $exclude_reply_user_ids,
+            "in_reply_to_tweet_id": $in_reply_to_tweet_id
+        },
+        "reply_settings": $reply_settings
+    }
+    returns
+    {
+        The Tweet.
+    }
+    params
+    {
+        optional string text
+        optional string direct_message_deep_link
+        optional bool for_super_followers_only
+        optional string geo_place_id
+        optional IEnumerable<long> media_ids
+        optional IEnumerable<long> media_tagged_user_ids
+        optional int poll_duration_minutes
+        optional IEnumerable<string> poll_options
+        optional long quote_tweet_id
+        optional IEnumerable<long> exclude_reply_user_ids
+        optional long in_reply_to_tweet_id
+        optional ReplySettings reply_settings
+    }
+}
+
+endpoint ManageResponse<DeleteResult> DeleteTweet : Delete tweets/{id}
+{
+    description
+    {
+        Delete a Tweet.
+    }
+    returns
+    {
+        The managing result (true: successful to delete).
+    }
+    params
+    {
+        required long id
+    }
+}
