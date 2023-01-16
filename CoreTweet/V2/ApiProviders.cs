@@ -85,5 +85,10 @@ namespace CoreTweet.V2
         /// Gets the wrapper of Follow API on Twitter API v2.
         /// </summary>
         public FollowApi FollowApi => new FollowApi(this.Tokens);
+
+        /// <summary>
+        /// Gets the wrapper of Direct Message API on Twitter API v2.
+        /// </summary>
+        public DirectMessageApi DirectMessageApi => new DirectMessageApi(this.Tokens);
     }
 }

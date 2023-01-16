@@ -1,0 +1,160 @@
+#root V2
+#namespace DirectMessageApi
+#urlsuffix ""
+#description Provides a set of methods for the wrapper of Direct Message API on Twitter API v2.
+
+endpoint DMEventsResponse GetDMEvents : Get dm_events
+{
+    description
+    {
+        Returns a variety of information about a list of Direct Messages for the authenticated user, both sent and received.
+        Direct Message events are returned in reverse chronological order.
+        Supports retrieving events from the previous 30 days.
+    }
+    returns
+    {
+        The DMEvents.
+    }
+    params
+    {
+        optional DMEventTypes event_types
+        optional int max_results
+        optional string pagination_token
+        optional DMEventExpansions expansions
+        optional DMEventFields dm_event_fields="dm_event.fields"
+        optional MediaFields media_fields="media.fields"
+        optional TweetFields tweet_fields="tweet.fields"
+        optional UserFields user_fields="user.fields"
+    }
+}
+
+endpoint DMEventsResponse GetDMEventsByConversationId : Get dm_conversations/{dm_conversation_id}/dm_events
+{
+    description
+    {
+        Returns a variety of information about a list of Direct Messages within a conversation specified in the dm_conversation_id path parameter.
+        Messages are returned in reverse chronological order.
+    }
+    returns
+    {
+        The DMEvents.
+    }
+    params
+    {
+        required string dm_conversation_id
+        optional DMEventTypes event_types
+        optional int max_results
+        optional string pagination_token
+        optional DMEventExpansions expansions
+        optional DMEventFields dm_event_fields="dm_event.fields"
+        optional MediaFields media_fields="media.fields"
+        optional TweetFields tweet_fields="tweet.fields"
+        optional UserFields user_fields="user.fields"
+    }
+}
+
+endpoint DMEventsResponse GetDMEventsByParticipantId : Get dm_conversations/with/{participant_id}/dm_events
+{
+    description
+    {
+        Returns a variety of information about a list of Direct Messages (DM) events within a 1-1 conversation with the user specified in the participant_id path parameter.
+        Messages are returned in reverse chronological order.
+    }
+    returns
+    {
+        The DMEvents.
+    }
+    params
+    {
+        required long participant_id
+        optional DMEventTypes event_types
+        optional int max_results
+        optional string pagination_token
+        optional DMEventExpansions expansions
+        optional DMEventFields dm_event_fields="dm_event.fields"
+        optional MediaFields media_fields="media.fields"
+        optional TweetFields tweet_fields="tweet.fields"
+        optional UserFields user_fields="user.fields"
+    }
+}
+
+endpoint ManageDMResponse SendToConversation : Post dm_conversations/{dm_conversation_id}/messages
+{
+    description
+    {
+        Creates a Direct Message on behalf of an authenticated user, and adds it to the specified conversation.
+    }
+    jsonmap
+    {
+        "text": $text,
+        "attachments": [
+            "media_id": "$media_id"
+        ]
+    }
+    returns
+    {
+        The created Direct Message info.
+    }
+    params
+    {
+        required string dm_conversation_id
+        optional string text
+        optional long media_id
+    }
+}
+
+endpoint ManageDMResponse SendToParticipant : Post dm_conversations/with/{participant_id}/messages
+{
+    description
+    {
+        Creates a one-to-one Direct Message and adds it to the one-to-one conversation.
+        This method either creates a new one-to-one conversation or retrieves the current conversation and adds the Direct Message to it.
+    }
+    jsonmap
+    {
+        "text": $text,
+        "attachments": [
+            "media_id": "$media_id"
+        ]
+    }
+    returns
+    {
+        The created Direct Message info.
+    }
+    params
+    {
+        required long participant_id
+        optional string text
+        optional long media_id
+    }
+}
+
+endpoint ManageDMResponse CreateConversation : Post dm_conversations
+{
+    description
+    {
+        Creates a one-to-one Direct Message and adds it to the one-to-one conversation.
+        This method either creates a new one-to-one conversation or retrieves the current conversation and adds the Direct Message to it.
+    }
+    jsonmap
+    {
+        "conversation_type": "Group",
+        "participant_ids": $participant_ids,
+        "message": {
+            "text": $text,
+            "attachments": [
+                "media_id": "$media_id",
+            ]
+        }
+    }
+    returns
+    {
+        The created Direct Message info.
+    }
+    params
+    {
+        required IEnumerable<long> participant_ids
+        optional string text
+        optional long media_id
+    }
+}

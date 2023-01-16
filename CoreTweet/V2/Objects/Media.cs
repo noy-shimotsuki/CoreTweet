@@ -27,6 +27,7 @@ using System.Text;
 using CoreTweet.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace CoreTweet.V2
 {
@@ -94,10 +95,22 @@ namespace CoreTweet.V2
         public MediaType Type { get; set; }
 
         /// <summary>
-        /// Undocumented property.
+        /// A direct URL to the media file on Twitter.
         /// </summary>
         [JsonProperty("url")]
         public string Url { get; set; }
+
+        /// <summary>
+        /// A description of an image to enable and support accessibility.
+        /// </summary>
+        [JsonProperty("alt_text")]
+        public string AltText { get; set; }
+
+        /// <summary>
+        /// Each media object may have multiple display or playback variants, with different resolutions or formats
+        /// </summary>
+        [JsonProperty("variants")]
+        public MediaVariant[] Variants { get; set; }
     }
 
     public interface IMediaNonPublicMetrics
@@ -247,6 +260,18 @@ namespace CoreTweet.V2
         public int ViewCount { get; set; }
     }
 
+    public class MediaVariant : CoreBase
+    {
+        [JsonProperty("bit_rate")]
+        public int? BitRate { get; set; }
+
+        [JsonProperty("content_type")]
+        public string ContentType { get; set; }
+
+        [JsonProperty("url")]
+        public string Url { get; set; }
+    }
+
     [JsonConverter(typeof(StringEnumConverter))]
     public enum MediaType
     {
@@ -276,7 +301,9 @@ namespace CoreTweet.V2
         NonPublicMetrics = 0x00000100,
         OrganicMetrics   = 0x00000200,
         PromotedMetrics  = 0x00000400,
-        All              = 0x000007ff,
+        AltText          = 0x00000800,
+        Variants         = 0x00001000,
+        All              = 0x00001fff,
     }
 
     public static class MediaFieldsExtensions
@@ -310,6 +337,10 @@ namespace CoreTweet.V2
                 builder.Append("organic_metrics,");
             if ((value & MediaFields.PromotedMetrics) != 0)
                 builder.Append("promoted_metrics,");
+            if ((value & MediaFields.AltText) != 0)
+                builder.Append("alt_text,");
+            if ((value & MediaFields.Variants) != 0)
+                builder.Append("variants,");
 
             return builder.ToString(0, builder.Length - 1);
         }

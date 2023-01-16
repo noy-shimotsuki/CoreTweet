@@ -171,6 +171,8 @@ namespace CoreTweet.Core
                 return V2.TweetExpansionsExtensions.ToQueryString((V2.TweetExpansions)x);
             if (x is V2.UserExpansions)
                 return V2.UserExpansionsExtensions.ToQueryString((V2.UserExpansions)x);
+            if (x is V2.DMEventExpansions)
+                return V2.DMEventExpansionsExtensions.ToQueryString((V2.DMEventExpansions)x);
 
             if (x is V2.MediaFields)
                 return V2.MediaFieldsExtensions.ToQueryString((V2.MediaFields)x);
@@ -182,9 +184,14 @@ namespace CoreTweet.Core
                 return V2.TweetFieldsExtensions.ToQueryString((V2.TweetFields)x);
             if (x is V2.UserFields)
                 return V2.UserFieldsExtensions.ToQueryString((V2.UserFields)x);
+            if (x is V2.DMEventFields)
+                return V2.DMEventFieldsExtensions.ToQueryString((V2.DMEventFields)x);
 
             if (x is V1.UploadMediaType)
                 return V1.Media.GetMediaTypeString((V1.UploadMediaType)x);
+
+            if (x is V2.DMEventTypes)
+                return V2.DMEventTypesExtensions.ToQueryString((V2.DMEventTypes)x);
 
             if (x is IEnumerable<string>
                 || x is IEnumerable<int>
