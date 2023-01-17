@@ -397,14 +397,14 @@ namespace CoreTweet.V2
         /// <summary>
         /// Number of times the Tweet has been viewed.
         /// </summary>
-        [JsonProperty("impression_count")]
+        [JsonProperty("url_link_clicks")]
 
         public int UrlLinkClicks { get; set; }
 
         /// <summary>
         /// Number of times the Tweet has been viewed.
         /// </summary>
-        [JsonProperty("impression_count")]
+        [JsonProperty("user_profile_clicks")]
         public int UserProfileClicks { get; set; }
     }
 
@@ -444,14 +444,14 @@ namespace CoreTweet.V2
         /// <summary>
         /// Number of times the Tweet has been viewed.
         /// </summary>
-        [JsonProperty("impression_count")]
+        [JsonProperty("url_link_clicks")]
 
         public int UrlLinkClicks { get; set; }
 
         /// <summary>
         /// Number of times the Tweet has been viewed.
         /// </summary>
-        [JsonProperty("impression_count")]
+        [JsonProperty("user_profile_clicks")]
         public int UserProfileClicks { get; set; }
     }
 
