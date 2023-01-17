@@ -364,7 +364,36 @@ namespace CoreTweet.Core
             }).Aggregate(uri, (acc, kvp) => acc.Replace(string.Format("{{{0}}}", kvp.Key), FormatObjectForParameter(kvp.Value).ToString()));
             return t.AccessApiArrayImpl<T>(m, replaced, list, "", urlPrefix, urlSuffix);
         }
-        #endif
+
+        /// <summary>
+        /// id, slug, etc
+        /// </summary>
+        internal static T AccessParameterReservedAndJsonParameteredApi<T>(this TokensBase t, string uri, IEnumerable<string> reserveds, IEnumerable<KeyValuePair<string, object>> parameters, string[] jsonMap, string jsonPath = "", string urlPrefix = null, string urlSuffix = null)
+        {
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+            var list = parameters.ToList();
+            var replaced = reserveds.Select(reserved =>
+            {
+                var kvp = GetReservedParameter(list, reserved);
+                list.Remove(kvp);
+                return kvp;
+            }).Aggregate(uri, (acc, kvp) => acc.Replace(string.Format("{{{0}}}", kvp.Key), FormatObjectForParameter(kvp.Value).ToString()));
+            return t.AccessJsonParameteredApiImpl<T>(replaced, list, jsonMap, jsonPath, urlPrefix, urlSuffix);
+        }
+
+        internal static ListedResponse<T> AccessParameterReservedAndJsonParameteredApiArray<T>(this TokensBase t, string uri, IEnumerable<string> reserveds, IEnumerable<KeyValuePair<string, object>> parameters, string[] jsonMap, string jsonPath = "", string urlPrefix = null, string urlSuffix = null)
+        {
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+            var list = parameters.ToList();
+            var replaced = reserveds.Select(reserved =>
+            {
+                var kvp = GetReservedParameter(list, reserved);
+                list.Remove(kvp);
+                return kvp;
+            }).Aggregate(uri, (acc, kvp) => acc.Replace(string.Format("{{{0}}}", kvp.Key), FormatObjectForParameter(kvp.Value).ToString()));
+            return t.AccessJsonParameteredApiArrayImpl<T>(replaced, list, jsonMap, jsonPath, urlPrefix, urlSuffix);
+        }
+#endif
 
         internal static Task AccessParameterReservedApiNoResponseAsync(this TokensBase t, MethodType m, string uri, IEnumerable<string> reserveds, IEnumerable<KeyValuePair<string, object>> parameters, CancellationToken cancellationToken, string urlPrefix = null, string urlSuffix = null)
         {
@@ -403,6 +432,32 @@ namespace CoreTweet.Core
                 return kvp;
             }).Aggregate(uri, (acc, kvp) => acc.Replace(string.Format("{{{0}}}", kvp.Key), FormatObjectForParameter(kvp.Value).ToString()));
             return t.AccessApiArrayAsyncImpl<T>(m, replaced, list, cancellationToken, "", urlPrefix, urlSuffix);
+        }
+
+        internal static Task<T> AccessParameterReservedAndJsonParameteredApiAsync<T>(this TokensBase t, string uri, IEnumerable<string> reserveds, IEnumerable<KeyValuePair<string, object>> parameters, string[] jsonMap, CancellationToken cancellationToken, string jsonPath = "", string urlPrefix = null, string urlSuffix = null)
+        {
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+            var list = parameters.ToList();
+            var replaced = reserveds.Select(reserved =>
+            {
+                var kvp = GetReservedParameter(list, reserved);
+                list.Remove(kvp);
+                return kvp;
+            }).Aggregate(uri, (acc, kvp) => acc.Replace(string.Format("{{{0}}}", kvp.Key), FormatObjectForParameter(kvp.Value).ToString()));
+            return t.AccessJsonParameteredApiAsyncImpl<T>(replaced, list, jsonMap, cancellationToken, jsonPath, urlPrefix, urlSuffix);
+        }
+
+        internal static Task<ListedResponse<T>> AccessParameterReservedAndJsonParameteredApiArrayAsync<T>(this TokensBase t, string uri, IEnumerable<string> reserveds, IEnumerable<KeyValuePair<string, object>> parameters, string[] jsonMap, CancellationToken cancellationToken, string jsonPath = "", string urlPrefix = null, string urlSuffix = null)
+        {
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+            var list = parameters.ToList();
+            var replaced = reserveds.Select(reserved =>
+            {
+                var kvp = GetReservedParameter(list, reserved);
+                list.Remove(kvp);
+                return kvp;
+            }).Aggregate(uri, (acc, kvp) => acc.Replace(string.Format("{{{0}}}", kvp.Key), FormatObjectForParameter(kvp.Value).ToString()));
+            return t.AccessJsonParameteredApiArrayAsyncImpl<T>(replaced, list, jsonMap, cancellationToken, jsonPath, urlPrefix, urlSuffix);
         }
 
         internal static Task<AsyncResponse> ResponseCallback(this Task<AsyncResponse> task, CancellationToken cancellationToken)
