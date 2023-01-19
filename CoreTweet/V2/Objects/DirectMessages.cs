@@ -56,6 +56,12 @@ namespace CoreTweet.V2
         /// </summary>
         [JsonProperty("referenced_tweets")]
         public DMReferencedTweet[] ReferencedTweets { get; set; }
+
+        /// <summary>
+        /// Undocumented
+        /// </summary>
+        [JsonProperty("participant_ids")]
+        public long[] ParticipantIds { get; set; }
     }
 
     public class DMAttachments : CoreBase
